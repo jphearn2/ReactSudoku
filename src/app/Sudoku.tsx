@@ -2,6 +2,7 @@ import React from "react"
 import { Board } from "./Board";
 import { NumberSelect } from "./NumberSelect";
 import { solve } from "solver/solver";
+import { ICell } from "./ICell";
 
 
 enum stage {
@@ -11,6 +12,7 @@ enum stage {
 }
 
 interface IState {
+    reBoard: ICell[][];
     board: number[][];
     buttonSelected: number;
     type: stage;
@@ -19,11 +21,13 @@ interface IState {
 export class Sudoku extends React.Component<{}, IState>{
     constructor(props: {}) {
         super(props);
-        this.state = { board: [], buttonSelected: 0, type: stage.input };
+        this.state = { reBoard: [], board: [], buttonSelected: 0, type: stage.input };
         for (let row = 0; row < 9; row++) {
             this.state.board.push([]);
+            this.state.reBoard.push([]);
             for (let cell = 0; cell < 9; cell++) {
                 this.state.board[row].push(0);
+                this.state.reBoard[row].push({ stored: 0, mutable: true });
             }
         }
 
@@ -46,14 +50,26 @@ export class Sudoku extends React.Component<{}, IState>{
             return (
                 <div>
                     <button onClick={() => {
-                        this.setState((prev) => ({ ...prev, board: solve(this.state.board), type: stage.solveForMe }))
+                        let newBoard = solve(this.state.reBoard.map((row) => {
+                            return row.map((cell) => {
+                                return cell.stored;
+                            })
+                        }));
+                        let newICellBoard: ICell[][] = [];
+                        for(let row = 0; row < 9; row++){
+                            newICellBoard.push([]);
+                            for(let col = 0; col < 9; col++){
+                                newICellBoard[row].push( { mutable: false, stored: newBoard[row][col] } )
+                            }
+                        }
 
+                        this.setState((prev) => ({ ...prev, reBoard: newICellBoard }) )
                     }}>solve for me</button>
-                    <Board board={this.state.board} onClick={(row: number, col: number) => {
-                        let newBoard = [...this.state.board];
-                        newBoard[row][col] = this.state.buttonSelected;
+                    <Board board={this.state.reBoard} onClick={(row: number, col: number) => {
+                        let newBoard = [...this.state.reBoard];
+                        newBoard[row][col] = { mutable: true, stored: this.state.buttonSelected }
 
-                        this.setState((prev) => ({ ...prev, board: newBoard }))
+                        this.setState((prev) => ({ ...prev, reBoard: newBoard }))
                     }} />
                     <NumberSelect prevSelected={this.state.buttonSelected} onClick={(num: number) => {
                         if (this.state.buttonSelected != num) {
@@ -71,7 +87,7 @@ export class Sudoku extends React.Component<{}, IState>{
             return (
                 <div>
                     <br/>
-                    <Board board={this.state.board} onClick={(row: number, col: number) =>{}} />
+                    <Board board={this.state.reBoard} onClick={(row: number, col: number) =>{}} />
                     <br/>
                     <button onClick={() => {
                         this.setState((prev) => ({ ...prev, board: this.newBoard(), type: stage.input }));

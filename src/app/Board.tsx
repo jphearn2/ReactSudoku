@@ -1,8 +1,9 @@
 import React from "react"
 import { Cell } from "./Cell";
+import { ICell } from "./ICell";
 
 interface IProps{
-    board : number[][];
+    board : ICell[][];
     onClick: (row: number, col: number) => void;
 }
 
@@ -32,10 +33,10 @@ export function Board(props: IProps){
                     return (<tr>
                         {row.map((cell, cellIndex) => {
                             if(cellIndex / 3 >= 1 && cellIndex / 3 < 2){
-                                return( <td onClick={() => props.onClick(rowNum, cellIndex)} style={cellOdds}><Cell cell={cell} /></td>)
+                                return <Cell cell={cell} onClick={props.onClick} styles={cellOdds} row={rowNum} col={cellIndex} />
                             }
                             else{
-                                return( <td onClick={() => props.onClick(rowNum, cellIndex)} style={cellEven}><Cell cell={cell} /></td>)
+                                return( <Cell cell={cell} onClick={props.onClick} styles={cellEven} row={rowNum} col={cellIndex} />)
                             }
                         })}
                     </tr>)
@@ -44,10 +45,10 @@ export function Board(props: IProps){
                     return (<tr>
                         {row.map((cell, cellIndex) => {
                             if(cellIndex / 3 >= 1 && cellIndex / 3 < 2){
-                                return( <td onClick={() => props.onClick(rowNum, cellIndex)} style={cellEven}><Cell cell={cell} /></td>)
+                                return( <Cell cell={cell} onClick={props.onClick} styles={cellEven} row={rowNum} col={cellIndex} />)
                             }
                             else{
-                                return( <td onClick={() => props.onClick(rowNum, cellIndex)} style={cellOdds}><Cell cell={cell} /></td>)
+                                return( <Cell cell={cell} onClick={props.onClick} styles={cellOdds} row={rowNum} col={cellIndex} />)
                             }
                         })}
                     </tr>)
