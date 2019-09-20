@@ -8,8 +8,8 @@ interface IProps{
 }
 
 let cellOdds = {
-    width: "25px",
-    height: "25px",
+    width: "50px",
+    height: "50px",
     textAlign: "center",
     border: "1px",
     borderStyle: "solid",
@@ -17,8 +17,8 @@ let cellOdds = {
 } as React.CSSProperties
 
 let cellEven = {
-    width: "25px",
-    height: "25px",
+    width: "50px",
+    height: "50px",
     textAlign: "center",
     border: "1px",
     borderStyle: "solid",

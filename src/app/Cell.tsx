@@ -9,25 +9,33 @@ interface IProps {
     col: number;
 }
 
-export function Cell(props: IProps) {
+function cellDisplay(props: IProps): string{
+    if(props.cell.notes != ""){
+        return  props.cell.notes
+    }
     if (props.cell.stored != 0) {
-        if (props.cell.mutable) {
-            return (
-                <td style={props.styles}
-                onClick={() => {props.onClick(props.row, props.col)}}>
-                    {props.cell.stored}
-                </td>
-            )
-        }
-        else{
-            return (
-                <td style={props.styles}>
-                    {props.cell.stored}
-                </td>
-            )
-        }
+        return props.cell.stored + "";
+    }
+    else
+        return ""
+}
+
+export function Cell(props: IProps) {
+
+    if (props.cell.mutable) {
+        return (
+            <td style={props.styles}
+                onClick={() => { props.onClick(props.row, props.col) }}>
+                {cellDisplay(props)}
+            </td>
+        )
     }
     else {
-        return <td style={props.styles} onClick={() => {props.onClick(props.row, props.col)}}></td>;
+        return (
+            <td style={props.styles}>
+                {cellDisplay(props)}
+            </td>
+        )
     }
+
 }
