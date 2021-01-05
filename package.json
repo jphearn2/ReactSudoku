@@ -15,7 +15,7 @@
   "repository": "https://github.com/el-kamino/UI_StarterProject",
   "dependencies": {
     "@types/enzyme": "^3.10.3",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "enzyme": "^3.10.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
